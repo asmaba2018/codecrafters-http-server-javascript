@@ -9,10 +9,10 @@ const server = net.createServer((socket) => {
     const request = data.toString();
 
     const url = request.split(" ")[1];
-    // console.log(url);
+    console.log(url);
 
     const headers = request.split("\r\n");
-    // console.log(headers);
+    console.log(headers);
 
     if (url == "/") {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
