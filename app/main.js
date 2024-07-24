@@ -43,7 +43,7 @@ const server = net.createServer((socket) => {
 	  console.log(headers["Accept-Encoding"]);
 	  return;
 	  let gzipEncoded = false;
-	  for (const encoding of headers["Accept-Encoding"]) {
+	  for (const encoding of headers["Accept-Encoding"].split(", ")) {
 		if (encoding === "gzip") {
 		  gzipEncoded = true;
 		  break;
