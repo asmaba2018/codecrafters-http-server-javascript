@@ -40,7 +40,6 @@ const server = net.createServer((socket) => {
 	} else if (path.startsWith("/echo/")) {
 	  const content = path.split("/echo/")[1];
 	  // console.log(content);
-	  console.log(headers["Accept-Encoding:"]);
 	  if (headers["Accept-Encoding:"] === "gzip") {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  } else {
