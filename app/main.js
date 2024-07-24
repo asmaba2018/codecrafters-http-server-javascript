@@ -11,6 +11,7 @@ const directory = flags.find((_, index) => flags[index - 1] == "--directory");
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const [request, host, agent] = data.toString().split("\r\n");
+    console.log(request);
 
     const [method, path, version] = request.split(" ");
 
