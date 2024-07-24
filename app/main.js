@@ -5,17 +5,30 @@ const fs = require("fs");
 console.log("Logs from your program will appear here!");
 
 // Uncomment this to pass the first stage
-const flags = process.argv.slice(2);
-const directory = flags.find((_, index) => flags[index - 1] == "--directory");
+const args = {};
+process.argv.forEach((arg, index) => {
+  if (arg.startWith("--")) {
+    agrs[arg.replace(/^--/, "")] = process.argv[index + 1];
+  }
+});
+
+const directory = args["directory"];
 
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
-    const request = data.toString().split("\r\n");
-    console.log(request);
-    // console.log(host);
-    // console.log(agent);
+    const full_request = data.toString().split("\r\n");
+    
+    const headers = {};
+    full_request.slice(1).forEach((header) => {
+	const [key, value] = header.split(" ");
+	if (key && value) {
+	  headers[key] = value;
+	}
+    });
 
-    const [method, path, version] = request[0].split(" ");
+    console.log(headers);
+    
+    const [method, path, version] = full_request[0].split(" ");
     console.log(method);
     console.log(path);
     console.log(version);
