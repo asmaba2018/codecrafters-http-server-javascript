@@ -10,11 +10,11 @@ const server = net.createServer((socket) => {
 
     if (request.startsWith("GET / ")) {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
+	socket.write(httpResponse);
     } else {
 	const httpResponse = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+	socket.write(httpResponse);
     }
-
-    socket.write(httpResponse);
 
     socket.end();
 
