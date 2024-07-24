@@ -8,7 +8,7 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const request = data.toString();
 
-    const url = request.split(" ")[0];
+    const url = request.split(" ")[1];
     console.log(url);
 
     const headers = request.split("\r\n");
