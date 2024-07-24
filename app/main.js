@@ -11,9 +11,10 @@ const directory = flags.find((_, index) => flags[index - 1] == "--directory");
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const [request, host, agent] = data.toString().split("\r\n");
-    console.log(request);
+    console.log(host, agent)
 
     const [method, path, version] = request.split(" ");
+    console.log(method, path, version);
 
     if (method == "GET") {
 	if (path == "/") {
@@ -34,7 +35,6 @@ const server = net.createServer((socket) => {
 
 	  if(!fs.existsSync(directory + filePath)){
 	    socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
-	    socket.end();
 	  } else {
 	    const file = fs.readFileSync(directory + filePath);
 	    const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${file.length}\r\n\r\n${file}`
@@ -45,6 +45,9 @@ const server = net.createServer((socket) => {
 	  const httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 	  socket.write(httpResponse);
 	}
+    } else if (method == "POST") {
+	const filePath = path.split("/files/")[1];
+	fs.writeFileSync((directory + filePath), data);
     }
 
     socket.end();
