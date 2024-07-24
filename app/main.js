@@ -8,7 +8,7 @@ console.log("Logs from your program will appear here!");
 const args = {};
 process.argv.forEach((arg, index) => {
   if (arg.startsWith("--")) {
-    agrs[arg.replace(/^--/, "")] = process.argv[index + 1];
+    args[arg.replace(/^--/, "")] = process.argv[index + 1];
   }
 });
 
