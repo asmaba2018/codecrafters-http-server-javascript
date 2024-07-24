@@ -26,17 +26,15 @@ const server = net.createServer((socket) => {
 	}
     });
 
+    // console.log(headers);
+    
     const parsedData = full_request[full_request.length - 1]
 
-    console.log(headers);
-    
     const [method, path, version] = full_request[0].split(" ");
-    console.log(method);
-    console.log(path);
-    console.log(version);
+    // console.log(method, "\n", path, "\n", version);
 
-    if (method == "GET") {
-	if (path == "/") {
+    if (method === "GET") {
+	if (path === "/") {
 	  const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
 	  socket.write(httpResponse);
 	} else if (path.startsWith("/echo/")) {
@@ -44,7 +42,7 @@ const server = net.createServer((socket) => {
 	  // console.log(content);
 	  const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  socket.write(httpResponse);
-	} else if (path == ("/user-agent")) {
+	} else if (path === ("/user-agent")) {
 	  const userAgent = headers["User-Agent:"];
 	  // console.log(userAgent);
 	  const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`;
@@ -64,10 +62,12 @@ const server = net.createServer((socket) => {
 	  const httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 	  socket.write(httpResponse);
 	}
-    } else if (method == "POST") {
-	const filePath = path.split("/files/")[1];
-	fs.writeFileSync((directory + filePath), parsedData);
-	socket.write("HTTP/1.1 201 Created\r\n\r\n");
+    } else if (method === "POST") {
+	if (path.startsWith("/files/")){
+	  const filePath = path.split("/files/")[1];
+	  fs.writeFileSync((directory + filePath), parsedData);
+	  socket.write("HTTP/1.1 201 Created\r\n\r\n");
+	}
     }
 
     socket.end();
