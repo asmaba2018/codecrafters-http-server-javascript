@@ -32,42 +32,42 @@ const server = net.createServer((socket) => {
 
     const [method, path, version] = full_request[0].split(" ");
     // console.log(method, "\n", path, "\n", version);
+    let httpResponse;
 
     if (method === "GET") {
 	if (path === "/") {
-	  const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
-	  socket.write(httpResponse);
+	  httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
 	} else if (path.startsWith("/echo/")) {
 	  const content = path.split("/echo/")[1];
 	  // console.log(content);
-	  const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
-	  socket.write(httpResponse);
+	  if (headers["Accept-Encoding:"] === "gzip") {
+	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
+	  } else {
+	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	} else if (path === ("/user-agent")) {
 	  const userAgent = headers["User-Agent:"];
 	  // console.log(userAgent);
-	  const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`;
-	  socket.write(httpResponse);
+	  httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`;
 	} else if (path.startsWith("/files/")){
 	  const filePath = path.split("/files/")[1];
 
 	  if(!fs.existsSync(directory + filePath)){
-	    socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+	    httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 	  } else {
 	    const file = fs.readFileSync(directory + filePath);
-	    const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${file.length}\r\n\r\n${file}`
-	    socket.write(httpResponse);
+	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${file.length}\r\n\r\n${file}`
 	  }
 
 	} else {
-	  const httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
-	  socket.write(httpResponse);
+	  httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 	}
     } else if (method === "POST") {
 	if (path.startsWith("/files/")){
 	  const filePath = path.split("/files/")[1];
 	  fs.writeFileSync((directory + filePath), parsedData);
-	  socket.write("HTTP/1.1 201 Created\r\n\r\n");
+	  httpResponse = "HTTP/1.1 201 Created\r\n\r\n";
 	}
+    socket.write(httpResponse);
     }
 
     socket.end();
