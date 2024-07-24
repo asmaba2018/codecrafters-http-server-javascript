@@ -43,11 +43,13 @@ const server = net.createServer((socket) => {
 	  console.log(headers["Accept-Encoding"]);
 	  // return;
 	  let gzipEncoded = false;
-	  for (const encoding of headers["Accept-Encoding"].split(", ")) {
+	  if (headers["Accept-Encoding"]){
+	    for (const encoding of headers["Accept-Encoding"].split(", ")) {
 		if (encoding === "gzip") {
 		  gzipEncoded = true;
 		  break;
 		}
+	    }
 	  }
 	  if (gzipEncoded) {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
