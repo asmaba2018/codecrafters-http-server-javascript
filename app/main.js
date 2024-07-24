@@ -11,7 +11,7 @@ const server = net.createServer((socket) => {
     const url = request.split(" ")[0];
     // console.log(url);
 
-    const headers = request.split("\r\n");
+    const headers = request.split("\r\n")[2];
     console.log(headers);
 
     if (url == "/") {
