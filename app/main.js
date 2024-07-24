@@ -11,7 +11,7 @@ const server = net.createServer((socket) => {
     const url = request.split(" ")[0];
     // console.log(url);
 
-    const headers = request.split("\r\n")[2];
+    const headers = request.split("\r\n");
     console.log(headers);
 
     if (url == "/") {
@@ -23,7 +23,8 @@ const server = net.createServer((socket) => {
 	const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	socket.write(httpResponse);
     } else if (url == ("/user-agent")) {
-	//console.log(url.split("/user-agent"));
+	const userAgent = headers[2].split("User-Agent: ")[1];
+	console.log(userAgent);
     } else {
 	const httpResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 	socket.write(httpResponse);
