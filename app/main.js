@@ -15,7 +15,7 @@ const server = net.createServer((socket) => {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
 	socket.write(httpResponse);
     } else if (url.includes("/echo/")) {
-	const content = request.split("/echo/")[1];
+	const content = request.split("/echo/")[1].split(" ")[0];
 	console.log(content);
 	const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	socket.write(httpResponse);
