@@ -41,7 +41,7 @@ const server = net.createServer((socket) => {
 	  const content = path.split("/echo/")[1];
 	  // console.log(content);
 	  console.log(headers["Accept-Encoding"]);
-	  return;
+	  // return;
 	  let gzipEncoded = false;
 	  for (const encoding of headers["Accept-Encoding"].split(", ")) {
 		if (encoding === "gzip") {
@@ -54,7 +54,7 @@ const server = net.createServer((socket) => {
 	  } else {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  }
-	  console.log(gzipEncoded);
+	  // console.log(gzipEncoded);
 	} else if (path === ("/user-agent")) {
 	  const userAgent = headers["User-Agent"];
 	  // console.log(userAgent);
