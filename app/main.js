@@ -51,6 +51,7 @@ const server = net.createServer((socket) => {
 							socket.write(httpResponse);
 							socket.write(encContent);
 							socket.end();
+							respond = true;
 						}
 					} 
 
@@ -86,8 +87,10 @@ const server = net.createServer((socket) => {
 			}
 		}
 
-		socket.write(httpResponse);
-		socket.end();
+		if  (!respond) {
+			socket.write(httpResponse);
+			socket.end();
+		}
 
 	});
 
