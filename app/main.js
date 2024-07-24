@@ -34,6 +34,7 @@ const server = net.createServer((socket) => {
 		const [method, path, version] = full_request[0].split(" ");
 		// console.log(method, "\n", path, "\n", version);
 		let httpResponse;
+		let respond = false;
 
 		if (method === "GET") {
 			if (path === "/") {
@@ -42,7 +43,6 @@ const server = net.createServer((socket) => {
 				const content = path.split("/echo/")[1];
 				// console.log(content);
 				// console.log(headers["Accept-Encoding"]);
-				let respond = false;
 				if (headers["Accept-Encoding"]){
 					for (const encoding of headers["Accept-Encoding"].split(", ")) {
 						if (encoding === "gzip") {
