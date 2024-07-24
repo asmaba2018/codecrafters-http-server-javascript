@@ -48,10 +48,9 @@ const server = net.createServer((socket) => {
 						if (encoding === "gzip") {
 							const encContent = zlib.gzipSync(content);
 							httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: ${encoding}\r\nContent-Length: ${encContent.length}\r\n\r\n`;
-							httpResponse += encContent;
-							console.log(httpResponse);
-							respond = true;
-							break;
+							socket.write(httpResponse);
+							socket.write(encContent);
+							socket.end();
 						}
 					} 
 
