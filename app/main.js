@@ -44,6 +44,7 @@ const server = net.createServer((socket) => {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  } else {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
+	  }
 	} else if (path === ("/user-agent")) {
 	  const userAgent = headers["User-Agent:"];
 	  // console.log(userAgent);
