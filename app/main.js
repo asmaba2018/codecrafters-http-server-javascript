@@ -10,7 +10,7 @@ const server = net.createServer((socket) => {
 
     if (request.startsWith("GET /echo/")) {
 	const echostr = request.split("/").pop();
-	const httpResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {echostr.length}\r\n\r\n{echostr}";
+	const httpResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${echostr.length}\r\n\r\n${echostr}";
 	socket.write(httpResponse);
     } else if (request.startsWith("GET /")) {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
