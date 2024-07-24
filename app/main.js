@@ -26,6 +26,8 @@ const server = net.createServer((socket) => {
 	}
     });
 
+    const data = full_request[full_request.length - 1]
+
     console.log(headers);
     
     const [method, path, version] = full_request[0].split(" ");
@@ -65,6 +67,7 @@ const server = net.createServer((socket) => {
     } else if (method == "POST") {
 	const filePath = path.split("/files/")[1];
 	fs.writeFileSync((directory + filePath), data);
+	socket.write("HTTP/1.1 201 CREATED\r\n\r\n");
     }
 
     socket.end();
