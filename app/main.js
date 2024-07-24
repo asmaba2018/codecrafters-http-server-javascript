@@ -69,10 +69,11 @@ const server = net.createServer((socket) => {
 	  fs.writeFileSync((directory + filePath), parsedData);
 	  httpResponse = "HTTP/1.1 201 Created\r\n\r\n";
 	}
-    socket.write(httpResponse);
     }
 
+    socket.write(httpResponse);
     socket.end();
+
   });
 
   socket.on("close", () => {
