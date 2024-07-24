@@ -9,10 +9,10 @@ const server = net.createServer((socket) => {
     const request = data.toString();
 
     const url = request.split(" ")[1];
-    console.log(url);
+    // console.log(url);
 
     const headers = request.split("\r\n");
-    console.log(headers);
+    // console.log(headers);
 
     if (url == "/") {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
@@ -24,7 +24,7 @@ const server = net.createServer((socket) => {
 	socket.write(httpResponse);
     } else if (url == ("/user-agent")) {
 	const userAgent = headers[2].split("User-Agent: ")[1];
-	console.log(userAgent);
+	// console.log(userAgent);
 	const httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`;
 	socket.write(httpResponse);
     } else {
