@@ -8,7 +8,11 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const request = data.toString();
 
-    if (request.startsWith("GET / ")) {
+    if (request.startsWith("GET /echo/")) {
+	const echostr = request.split("/").pop();
+	const httpResponse = "HTTP/1.1 200 OK\r\n\r\nContent-Type: text/plain\r\nContent-Length: {echostr.length}\r\n\r\n{echostr}";
+	socket.write(httpResponse);
+    } else if (request.startsWith("GET /")) {
 	const httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
 	socket.write(httpResponse);
     } else {
@@ -17,9 +21,13 @@ const server = net.createServer((socket) => {
     }
 
     socket.end();
+  });
 
+  socket.on("close", () => {
+    socket.end();
     server.close();
   });
+
 });
 
 server.listen(4221, "localhost");
