@@ -11,7 +11,14 @@ const directory = flags.find((_, index) => flags[index - 1] == "--directory");
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const request = data.toString().split("\r\n");
-    console.log(request.slice(1).forEach((header) => {const [key, value] = header.split(" "); if (key && value) {headers[key] = value;}}));
+    const headers = {}
+    request.slice(1).forEach((header) => {
+	const [key, value] = header.split(" ");
+	if (key && value) {
+	  headers[key] = value;
+	}
+    });
+    console.log(headers);
     // console.log(host);
     // console.log(agent);
 
