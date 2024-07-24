@@ -20,7 +20,7 @@ const server = net.createServer((socket) => {
     
     const headers = {};
     full_request.slice(1).forEach((header) => {
-	const [key, value] = header.split(" ");
+	const [key, value] = header.split(": ");
 	if (key && value) {
 	  headers[key] = value;
 	}
@@ -40,13 +40,15 @@ const server = net.createServer((socket) => {
 	} else if (path.startsWith("/echo/")) {
 	  const content = path.split("/echo/")[1];
 	  // console.log(content);
-	  if (headers["Accept-Encoding:"] === "gzip") {
+	  console.log(headers["Accept-Encoding"]);
+	  return;
+	  if (headers["Accept-Encoding"] === "gzip") {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  } else {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  }
 	} else if (path === ("/user-agent")) {
-	  const userAgent = headers["User-Agent:"];
+	  const userAgent = headers["User-Agent"];
 	  // console.log(userAgent);
 	  httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`;
 	} else if (path.startsWith("/files/")){
