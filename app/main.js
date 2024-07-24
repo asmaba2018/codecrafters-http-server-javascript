@@ -1,5 +1,6 @@
 const net = require("net");
 const fs = require("fs");
+const zlib = require("zlib");
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.log("Logs from your program will appear here!");
@@ -41,22 +42,20 @@ const server = net.createServer((socket) => {
 	  const content = path.split("/echo/")[1];
 	  // console.log(content);
 	  console.log(headers["Accept-Encoding"]);
-	  // return;
-	  let gzipEncoded = false;
 	  if (headers["Accept-Encoding"]){
 	    for (const encoding of headers["Accept-Encoding"].split(", ")) {
 		if (encoding === "gzip") {
-		  gzipEncoded = true;
+		  const encContent = zlib.gzipSync(content);
+		  httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n`;
+		  httpResponse += encContent;
 		  break;
 		}
-	    }
+	    } else {
+	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  }
-	  if (gzipEncoded) {
-	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  } else {
 	    httpResponse = `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`;
 	  }
-	  // console.log(gzipEncoded);
 	} else if (path === ("/user-agent")) {
 	  const userAgent = headers["User-Agent"];
 	  // console.log(userAgent);
